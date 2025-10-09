@@ -1,2 +1,37 @@
-<p>meetings works!</p>
-<button (click)="test()">TEST</button>
+<div class="meetings-container">
+  <div class="meeting-card" *ngFor="let meeting of meetings">
+    <div class="meeting-header">
+      <h2>{{ meeting.date | date : 'fullDate' }}</h2>
+    </div>
+    <div class="meeting-content">
+      <div class="meeting-section">
+        <h3>Prayers</h3>
+        <p><strong>Invocation:</strong> {{ meeting.invocation }}</p>
+        <p><strong>Benediction:</strong> {{ meeting.benediction }}</p>
+      </div>
+
+      <div class="meeting-section">
+        <h3>Speakers</h3>
+        <ul>
+          <li *ngFor="let speaker of meeting.speakers">{{ speaker }}</li>
+        </ul>
+      </div>
+
+      <div class="meeting-section" *ngIf="meeting.wardBusiness?.length">
+        <h3>Ward Business</h3>
+        <ul>
+          <li *ngFor="let business of meeting.wardBusiness">
+            <span class="business-type">{{ business.type | titlecase }}:</span> {{ business.text }}
+          </li>
+        </ul>
+      </div>
+
+      <div class="meeting-section" *ngIf="meeting.stakeBusiness?.length">
+        <h3>Stake Business</h3>
+        <ul>
+          <li *ngFor="let business of meeting.stakeBusiness">{{ business }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
