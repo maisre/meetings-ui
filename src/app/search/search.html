@@ -1,0 +1,11 @@
+<p>search works!</p>
+<button (click)="getInfo()">TEST</button>
+
+<div class="search-controls">
+  <label for="dateRange">Date Range:</label>
+  <select id="dateRange" [(ngModel)]="selectedDateRange" (change)="dateChanged()">
+    <option value="3months">3 Months</option>
+    <option value="6months">6 Months</option>
+    <option value="1year" selected>1 Year</option>
+  </select>
+</div>
