@@ -23,4 +23,8 @@ export class MeetingService {
   public getPrayers(): Observable<{ date: Date; prayer: string }[]> {
     return this.http.get<any[]>(`${environment.apiUrl}/meetings/prayers`);
   }
+
+  public createMeeting(meeting: Meeting): Observable<Meeting> {
+    return this.http.post<Meeting>(`${environment.apiUrl}/meetings`, meeting);
+  }
 }

@@ -1,4 +1,147 @@
 <div class="meetings-container">
+  <!-- Create Meeting Button -->
+  <div class="create-meeting-section">
+    <button class="create-meeting-btn" (click)="toggleCreateForm()">
+      {{ showCreateForm ? 'Cancel' : 'Create New Meeting' }}
+    </button>
+  </div>
+
+  <!-- Create Meeting Form -->
+  <div class="create-form-container" *ngIf="showCreateForm">
+    <form [formGroup]="meetingForm" (ngSubmit)="onSubmit()" class="meeting-form">
+      <h2>Create New Meeting</h2>
+
+      <!-- Date -->
+      <div class="form-group">
+        <label for="date">Meeting Date:</label>
+        <input type="date" id="date" formControlName="date" class="form-control" required />
+        <div
+          *ngIf="meetingForm.get('date')?.invalid && meetingForm.get('date')?.touched"
+          class="error-message"
+        >
+          Date is required
+        </div>
+      </div>
+
+      <!-- Invocation -->
+      <div class="form-group">
+        <label for="invocation">Invocation:</label>
+        <select id="invocation" formControlName="invocation" class="form-control" required>
+          <option value="">Select member for invocation</option>
+          <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
+        </select>
+        <div
+          *ngIf="meetingForm.get('invocation')?.invalid && meetingForm.get('invocation')?.touched"
+          class="error-message"
+        >
+          Invocation is required
+        </div>
+      </div>
+
+      <!-- Benediction -->
+      <div class="form-group">
+        <label for="benediction">Benediction:</label>
+        <select id="benediction" formControlName="benediction" class="form-control" required>
+          <option value="">Select member for benediction</option>
+          <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
+        </select>
+        <div
+          *ngIf="meetingForm.get('benediction')?.invalid && meetingForm.get('benediction')?.touched"
+          class="error-message"
+        >
+          Benediction is required
+        </div>
+      </div>
+
+      <!-- Speakers -->
+      <div class="form-group">
+        <label>Speakers:</label>
+        <div formArrayName="speakers" class="speakers-container">
+          <div *ngFor="let speaker of speakers.controls; let i = index" class="speaker-item">
+            <select [formControlName]="i" class="form-control speaker-select" required>
+              <option value="">Select speaker</option>
+              <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
+            </select>
+            <button
+              type="button"
+              (click)="removeSpeaker(i)"
+              class="remove-btn"
+              *ngIf="speakers.length > 1"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+        <button type="button" (click)="addSpeaker()" class="add-btn">Add Speaker</button>
+      </div>
+
+      <!-- Ward Business -->
+      <div class="form-group">
+        <label>Ward Business:</label>
+        <div formArrayName="wardBusiness" class="ward-business-container">
+          <div
+            *ngFor="let wardBusiness of wardBusiness.controls; index as i"
+            class="ward-business-item"
+          >
+            <div class="ward-business-form" [formGroup]="getWardBusinessGroup(i)">
+              <select formControlName="type" class="form-control business-type-select" required>
+                <option value="">Select type</option>
+                <option *ngFor="let type of wardBusinessTypes" [value]="type">
+                  {{ type | titlecase }}
+                </option>
+              </select>
+              <input
+                type="text"
+                formControlName="text"
+                placeholder="Business description"
+                class="form-control business-text-input"
+                required
+              />
+              <button type="button" (click)="removeWardBusiness(i)" class="remove-btn">
+                Remove
+              </button>
+            </div>
+          </div>
+        </div>
+        <button type="button" (click)="addWardBusiness()" class="add-btn">Add Ward Business</button>
+      </div>
+
+      <!-- Stake Business -->
+      <div class="form-group">
+        <label>Stake Business:</label>
+        <div formArrayName="stakeBusiness" class="stake-business-container">
+          <div
+            *ngFor="let stakeBusiness of stakeBusiness.controls; let i = index"
+            class="stake-business-item"
+          >
+            <input
+              type="text"
+              [formControlName]="i"
+              placeholder="Stake business item"
+              class="form-control stake-business-input"
+              required
+            />
+            <button type="button" (click)="removeStakeBusiness(i)" class="remove-btn">
+              Remove
+            </button>
+          </div>
+        </div>
+        <button type="button" (click)="addStakeBusiness()" class="add-btn">
+          Add Stake Business
+        </button>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="meetingForm.invalid">
+          Create Meeting
+        </button>
+        <button type="button" (click)="toggleCreateForm()" class="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Existing Meetings -->
   <div class="meeting-card" *ngFor="let meeting of meetings">
     <div class="meeting-header">
       <h2>{{ meeting.date | date : 'fullDate' }}</h2>
