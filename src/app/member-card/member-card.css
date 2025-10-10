@@ -1,0 +1,187 @@
+.member-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 80px;
+}
+
+.member-card.active {
+  border-color: #4caf50;
+  background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
+}
+
+.member-card.inactive {
+  border-color: #f44336;
+  background: linear-gradient(135deg, #fff8f8 0%, #ffffff 100%);
+}
+
+.member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-name {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: 70px;
+  text-align: center;
+}
+
+.status-badge.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status-badge.inactive {
+  background-color: #f44336;
+  color: white;
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.toggle-btn.active {
+  background-color: #f44336;
+  color: white;
+}
+
+.toggle-btn.active:hover {
+  background-color: #d32f2f;
+}
+
+.toggle-btn.inactive {
+  background-color: #4caf50;
+  color: white;
+}
+
+.toggle-btn.inactive:hover {
+  background-color: #45a049;
+}
+
+.toggle-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.remove-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  background-color: #ff5722;
+  color: white;
+}
+
+.remove-btn:hover {
+  background-color: #e64a19;
+  transform: translateY(-1px);
+}
+
+.remove-btn:active {
+  transform: translateY(0);
+}
+
+.remove-section {
+  display: flex;
+  align-items: center;
+}
+
+.confirmation-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  animation: slideIn 0.3s ease-out;
+}
+
+.confirmation-text {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+  text-align: right;
+}
+
+.confirmation-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.confirm-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  background-color: #d32f2f;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #b71c1c;
+  transform: translateY(-1px);
+}
+
+.cancel-btn {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+  background-color: white;
+  color: #666;
+}
+
+.cancel-btn:hover {
+  background-color: #f5f5f5;
+  border-color: #999;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

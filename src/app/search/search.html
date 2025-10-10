@@ -1,11 +1,49 @@
-<p>search works!</p>
-<button (click)="getInfo()">TEST</button>
-
 <div class="search-controls">
-  <label for="dateRange">Date Range:</label>
-  <select id="dateRange" [(ngModel)]="selectedDateRange" (change)="dateChanged()">
-    <option value="3months">3 Months</option>
-    <option value="6months">6 Months</option>
-    <option value="1year" selected>1 Year</option>
-  </select>
+  <div class="control-group">
+    <label for="dateRange">Date Range:</label>
+    <select id="dateRange" [(ngModel)]="selectedDateRange" (change)="dateChanged()">
+      <option value="3months">3 Months</option>
+      <option value="6months">6 Months</option>
+      <option value="1year" selected>1 Year</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <label for="filterType">Show Members Who Have Not:</label>
+    <select id="filterType" [(ngModel)]="selectedFilterType" (change)="filterTypeChanged()">
+      <option value="both">Spoken OR Prayed</option>
+      <option value="speakers">Spoken</option>
+      <option value="prayers">Prayed</option>
+    </select>
+  </div>
+</div>
+
+<div class="members-display">
+  <h3>Available Members ({{ filteredMembers.length }})</h3>
+  <p class="search-info">
+    <ng-container [ngSwitch]="selectedFilterType">
+      <span *ngSwitchCase="'speakers'"
+        >Showing members who have not spoken since {{ searchDate | date : 'MMM d, y' }}</span
+      >
+      <span *ngSwitchCase="'prayers'"
+        >Showing members who have not prayed since {{ searchDate | date : 'MMM d, y' }}</span
+      >
+      <span *ngSwitchDefault
+        >Showing members who have not spoken or prayed since
+        {{ searchDate | date : 'MMM d, y' }}</span
+      >
+    </ng-container>
+  </p>
+
+  <div class="members-grid" *ngIf="filteredMembers.length > 0; else noMembers">
+    <div class="member-card" *ngFor="let member of filteredMembers">
+      <div class="member-name">{{ member.name }}</div>
+    </div>
+  </div>
+
+  <ng-template #noMembers>
+    <div class="no-members">
+      <p>No members available for the selected time period.</p>
+    </div>
+  </ng-template>
 </div>

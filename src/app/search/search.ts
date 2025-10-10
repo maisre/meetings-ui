@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MeetingService } from '../meeting.service';
 import { MemberService } from '../member.service';
 
 @Component({
   selector: 'ch-search',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './search.html',
   styleUrl: './search.css',
 })
@@ -14,9 +15,11 @@ export class Search implements OnInit {
   private memberService = inject(MemberService);
   public speakers: Array<{ date: Date; speaker: String }> = [];
   public prayers: Array<{ date: Date; prayer: String }> = [];
-  public members: Array<{ id: String; name: String }> = [];
+  public allMembers: Array<{ id: String; name: String }> = [];
+  public filteredMembers: Array<{ id: String; name: String }> = [];
   public searchDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
   public selectedDateRange: string = '1year';
+  public selectedFilterType: string = 'both';
 
   ngOnInit() {
     this.getInfo();
@@ -26,12 +29,15 @@ export class Search implements OnInit {
     this.meetingService.getPrayers().subscribe((res) => {
       this.prayers = res;
       console.log(res);
+      this.filterMembersAfterSearchDate();
     });
     this.meetingService.getSpeakers().subscribe((res) => {
       this.speakers = res;
+      this.filterMembersAfterSearchDate();
     });
     this.memberService.getMembers().subscribe((res) => {
-      this.members = res;
+      this.allMembers = res;
+      this.filterMembersAfterSearchDate();
     });
   }
 
@@ -58,6 +64,11 @@ export class Search implements OnInit {
     console.log('Date range changed to:', this.selectedDateRange, 'Search date:', this.searchDate);
   }
 
+  public filterTypeChanged() {
+    this.filterMembersAfterSearchDate();
+    console.log('Filter type changed to:', this.selectedFilterType);
+  }
+
   public filterMembersAfterSearchDate() {
     // Find all speakers and prayers that happened after searchDate
     const speakersAfterDate = this.speakers.filter(
@@ -70,17 +81,36 @@ export class Search implements OnInit {
     console.log('Speakers after date:', speakersAfterDate.length);
     console.log('Prayers after date:', prayersAfterDate.length);
 
-    // Extract unique member names from speakers and prayers
-    const activeMemberNames = new Set([
-      ...speakersAfterDate.map((speaker) => speaker.speaker),
-      ...prayersAfterDate.map((prayer) => prayer.prayer),
-    ]);
+    let activeMemberNames = new Set<string>();
 
-    // Filter out members who have spoken or prayed after searchDate
-    this.members = this.members.filter((member) => !activeMemberNames.has(member.id));
+    // Apply filtering based on selected filter type
+    switch (this.selectedFilterType) {
+      case 'speakers':
+        // Only filter out members who have spoken after searchDate
+        activeMemberNames = new Set(speakersAfterDate.map((speaker) => String(speaker.speaker)));
+        break;
+      case 'prayers':
+        // Only filter out members who have prayed after searchDate
+        activeMemberNames = new Set(prayersAfterDate.map((prayer) => String(prayer.prayer)));
+        break;
+      case 'both':
+      default:
+        // Filter out members who have either spoken or prayed after searchDate
+        activeMemberNames = new Set([
+          ...speakersAfterDate.map((speaker) => String(speaker.speaker)),
+          ...prayersAfterDate.map((prayer) => String(prayer.prayer)),
+        ]);
+        break;
+    }
+
+    // Filter out members who have been active based on the selected filter type
+    this.filteredMembers = this.allMembers.filter(
+      (member) => !activeMemberNames.has(String(member.id))
+    );
 
     console.log('Filtered members after search date:', this.searchDate);
-    console.log('Active members (speakers/prayers after date):', Array.from(activeMemberNames));
-    console.log('Remaining members:', this.members);
+    console.log('Filter type:', this.selectedFilterType);
+    console.log('Active members:', Array.from(activeMemberNames));
+    console.log('Remaining members:', this.filteredMembers);
   }
 }

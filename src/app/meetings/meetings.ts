@@ -23,10 +23,17 @@ export class Meetings implements OnInit {
   wardBusinessTypes = Object.values(WardBusinessType);
   showCreateForm = false;
 
+  // Autocomplete properties
+  filteredMembers: { id: string; name: string }[] = [];
+  showInvocationDropdown = false;
+  showBenedictionDropdown = false;
+  speakerDropdowns: boolean[] = [];
+
   ngOnInit() {
     this.initializeForm();
     this.memberService.getMembers().subscribe((res) => {
       this.members = res;
+      this.filteredMembers = [...this.members];
       this.meetingService.getMeetings().subscribe((res) => {
         res.forEach((meeting) => {
           // Replace invocation and benediction IDs with member names
@@ -50,7 +57,7 @@ export class Meetings implements OnInit {
       date: ['', Validators.required],
       invocation: ['', Validators.required],
       benediction: ['', Validators.required],
-      speakers: this.fb.array([this.fb.control('', Validators.required)]),
+      speakers: this.fb.array([]),
       wardBusiness: this.fb.array([]),
       stakeBusiness: this.fb.array([]),
     });
@@ -74,10 +81,12 @@ export class Meetings implements OnInit {
 
   addSpeaker() {
     this.speakers.push(this.fb.control('', Validators.required));
+    this.speakerDropdowns.push(false);
   }
 
   removeSpeaker(index: number) {
     this.speakers.removeAt(index);
+    this.speakerDropdowns.splice(index, 1);
   }
 
   addWardBusiness() {
@@ -106,14 +115,68 @@ export class Meetings implements OnInit {
     if (!this.showCreateForm) {
       this.meetingForm.reset();
       this.initializeForm();
+      this.speakerDropdowns = [];
     }
+  }
+
+  // Member filtering methods
+  filterMembers(query: string): { id: string; name: string }[] {
+    if (!query) return this.members;
+    return this.members.filter((member) => member.name.toLowerCase().includes(query.toLowerCase()));
+  }
+
+  onInvocationInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const query = target.value;
+    this.filteredMembers = this.filterMembers(query);
+    this.showInvocationDropdown = query.length > 0;
+  }
+
+  onBenedictionInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const query = target.value;
+    this.filteredMembers = this.filterMembers(query);
+    this.showBenedictionDropdown = query.length > 0;
+  }
+
+  onSpeakerInput(event: Event, index: number) {
+    const target = event.target as HTMLInputElement;
+    const query = target.value;
+    this.filteredMembers = this.filterMembers(query);
+    this.speakerDropdowns[index] = query.length > 0;
+  }
+
+  selectMember(
+    member: { id: string; name: string },
+    field: 'invocation' | 'benediction' | 'speaker',
+    index?: number
+  ) {
+    if (field === 'invocation') {
+      this.meetingForm.patchValue({ invocation: member.id });
+      this.showInvocationDropdown = false;
+    } else if (field === 'benediction') {
+      this.meetingForm.patchValue({ benediction: member.id });
+      this.showBenedictionDropdown = false;
+    } else if (field === 'speaker' && index !== undefined) {
+      this.speakers.at(index).setValue(member.id);
+      this.speakerDropdowns[index] = false;
+    }
+  }
+
+  getMemberName(memberId: string): string {
+    return this.members.find((m) => m.id === memberId)?.name || '';
   }
 
   onSubmit() {
     if (this.meetingForm.valid) {
       const formValue = this.meetingForm.value;
+      // Create date at local midnight to avoid timezone issues
+      const dateStr = formValue.date;
+      const [year, month, day] = dateStr.split('-').map(Number);
+      const localDate = new Date(year, month - 1, day);
+
       const meeting: Meeting = {
-        date: new Date(formValue.date),
+        date: localDate,
         invocation: formValue.invocation,
         benediction: formValue.benediction,
         speakers: formValue.speakers,

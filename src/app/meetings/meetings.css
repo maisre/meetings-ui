@@ -261,3 +261,63 @@
 .cancel-btn:hover {
   background: #545b62;
 }
+
+/* Autocomplete Styles */
+.autocomplete-container {
+  position: relative;
+  width: 100%;
+}
+
+.autocomplete-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.autocomplete-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.autocomplete-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.autocomplete-option {
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-option:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-option:hover {
+  background-color: #f8f9fa;
+}
+
+.autocomplete-option:active {
+  background-color: #007bff;
+  color: white;
+}
+
+.speaker-input {
+  flex: 1;
+}

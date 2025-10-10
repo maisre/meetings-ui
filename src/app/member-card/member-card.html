@@ -1,1 +1,30 @@
-<p>member-card works!</p>
+<div class="member-card" [class.active]="member.isActive" [class.inactive]="!member.isActive">
+  <div class="member-info">
+    <h3 class="member-name">{{ member.name }}</h3>
+    <span class="status-badge" [class.active]="member.isActive" [class.inactive]="!member.isActive">
+      {{ member.isActive ? 'Active' : 'Inactive' }}
+    </span>
+  </div>
+  <div class="action-buttons">
+    <button
+      class="toggle-btn"
+      (click)="toggleStatus()"
+      [class.active]="member.isActive"
+      [class.inactive]="!member.isActive"
+    >
+      {{ member.isActive ? 'Mark Inactive' : 'Mark Active' }}
+    </button>
+
+    <div class="remove-section" *ngIf="!showConfirmation">
+      <button class="remove-btn" (click)="removeMember()" title="Remove member">Remove</button>
+    </div>
+
+    <div class="confirmation-section" *ngIf="showConfirmation">
+      <div class="confirmation-text">Remove {{ member.name }}?</div>
+      <div class="confirmation-buttons">
+        <button class="confirm-btn" (click)="removeMember()">Yes, Remove</button>
+        <button class="cancel-btn" (click)="cancelRemoval()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

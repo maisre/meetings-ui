@@ -26,10 +26,30 @@
       <!-- Invocation -->
       <div class="form-group">
         <label for="invocation">Invocation:</label>
-        <select id="invocation" formControlName="invocation" class="form-control" required>
-          <option value="">Select member for invocation</option>
-          <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
-        </select>
+        <div class="autocomplete-container">
+          <input
+            type="text"
+            id="invocation"
+            class="form-control autocomplete-input"
+            [value]="getMemberName(meetingForm.get('invocation')?.value)"
+            (input)="onInvocationInput($event)"
+            (focus)="showInvocationDropdown = true"
+            placeholder="Type to search members..."
+            required
+          />
+          <div
+            class="autocomplete-dropdown"
+            *ngIf="showInvocationDropdown && filteredMembers.length > 0"
+          >
+            <div
+              *ngFor="let member of filteredMembers"
+              class="autocomplete-option"
+              (click)="selectMember(member, 'invocation')"
+            >
+              {{ member.name }}
+            </div>
+          </div>
+        </div>
         <div
           *ngIf="meetingForm.get('invocation')?.invalid && meetingForm.get('invocation')?.touched"
           class="error-message"
@@ -41,10 +61,30 @@
       <!-- Benediction -->
       <div class="form-group">
         <label for="benediction">Benediction:</label>
-        <select id="benediction" formControlName="benediction" class="form-control" required>
-          <option value="">Select member for benediction</option>
-          <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
-        </select>
+        <div class="autocomplete-container">
+          <input
+            type="text"
+            id="benediction"
+            class="form-control autocomplete-input"
+            [value]="getMemberName(meetingForm.get('benediction')?.value)"
+            (input)="onBenedictionInput($event)"
+            (focus)="showBenedictionDropdown = true"
+            placeholder="Type to search members..."
+            required
+          />
+          <div
+            class="autocomplete-dropdown"
+            *ngIf="showBenedictionDropdown && filteredMembers.length > 0"
+          >
+            <div
+              *ngFor="let member of filteredMembers"
+              class="autocomplete-option"
+              (click)="selectMember(member, 'benediction')"
+            >
+              {{ member.name }}
+            </div>
+          </div>
+        </div>
         <div
           *ngIf="meetingForm.get('benediction')?.invalid && meetingForm.get('benediction')?.touched"
           class="error-message"
@@ -58,18 +98,30 @@
         <label>Speakers:</label>
         <div formArrayName="speakers" class="speakers-container">
           <div *ngFor="let speaker of speakers.controls; let i = index" class="speaker-item">
-            <select [formControlName]="i" class="form-control speaker-select" required>
-              <option value="">Select speaker</option>
-              <option *ngFor="let member of members" [value]="member.id">{{ member.name }}</option>
-            </select>
-            <button
-              type="button"
-              (click)="removeSpeaker(i)"
-              class="remove-btn"
-              *ngIf="speakers.length > 1"
-            >
-              Remove
-            </button>
+            <div class="autocomplete-container">
+              <input
+                type="text"
+                class="form-control autocomplete-input speaker-input"
+                [value]="getMemberName(speaker.value)"
+                (input)="onSpeakerInput($event, i)"
+                (focus)="speakerDropdowns[i] = true"
+                placeholder="Type to search members..."
+                required
+              />
+              <div
+                class="autocomplete-dropdown"
+                *ngIf="speakerDropdowns[i] && filteredMembers.length > 0"
+              >
+                <div
+                  *ngFor="let member of filteredMembers"
+                  class="autocomplete-option"
+                  (click)="selectMember(member, 'speaker', i)"
+                >
+                  {{ member.name }}
+                </div>
+              </div>
+            </div>
+            <button type="button" (click)="removeSpeaker(i)" class="remove-btn">Remove</button>
           </div>
         </div>
         <button type="button" (click)="addSpeaker()" class="add-btn">Add Speaker</button>
@@ -144,7 +196,7 @@
   <!-- Existing Meetings -->
   <div class="meeting-card" *ngFor="let meeting of meetings">
     <div class="meeting-header">
-      <h2>{{ meeting.date | date : 'fullDate' }}</h2>
+      <h2>{{ meeting.date | date : 'EEEE, MMMM d, y' }}</h2>
     </div>
     <div class="meeting-content">
       <div class="meeting-section">
@@ -153,7 +205,7 @@
         <p><strong>Benediction:</strong> {{ meeting.benediction }}</p>
       </div>
 
-      <div class="meeting-section">
+      <div class="meeting-section" *ngIf="meeting.speakers?.length">
         <h3>Speakers</h3>
         <ul>
           <li *ngFor="let speaker of meeting.speakers">{{ speaker }}</li>

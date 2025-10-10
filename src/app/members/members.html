@@ -1,2 +1,32 @@
-<p>members works!</p>
-<button (click)="test()">TEST</button>
+<div class="members-container">
+  <div class="header">
+    <h1>Members</h1>
+    <button class="refresh-btn" (click)="refreshMembers()" [disabled]="loading">
+      {{ loading ? 'Loading...' : 'Refresh' }}
+    </button>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Loading members...</p>
+  </div>
+
+  <div class="error" *ngIf="error">
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="refreshMembers()">Retry</button>
+  </div>
+
+  <div class="members-grid" *ngIf="!loading && !error">
+    <ch-member-card
+      *ngFor="let member of members"
+      [member]="member"
+      (statusChanged)="onStatusChanged($event)"
+      (memberRemoved)="onMemberRemoved($event)"
+    >
+    </ch-member-card>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !error && members.length === 0">
+    <p>No members found.</p>
+  </div>
+</div>
