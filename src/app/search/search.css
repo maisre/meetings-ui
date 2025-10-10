@@ -37,6 +37,117 @@
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
+.active-members-display {
+  margin-top: 30px;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #e8f5e8;
+  border-radius: 8px;
+  border: 1px solid #c3e6c3;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  padding: 5px 0;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  margin: -5px -5px 10px -5px;
+  padding: 10px 5px;
+}
+
+.section-header:hover {
+  background-color: rgba(45, 90, 45, 0.1);
+}
+
+.section-header h3 {
+  color: #2d5a2d;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.collapse-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #2d5a2d;
+  transition: transform 0.3s ease;
+}
+
+.collapse-icon.collapsed {
+  transform: rotate(-90deg);
+}
+
+.section-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.section-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.active-members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.active-member-card {
+  background: white;
+  border: 1px solid #a8d8a8;
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.active-member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-color: #2d5a2d;
+}
+
+.active-member-card .member-name {
+  font-weight: 600;
+  color: #2d5a2d;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.member-activity {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.activity-type {
+  background: #2d5a2d;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.activity-date {
+  color: #666;
+  font-style: italic;
+}
+
 .members-display {
   margin-top: 30px;
 }
@@ -108,6 +219,11 @@
 
   .control-group {
     justify-content: space-between;
+  }
+
+  .active-members-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
   }
 
   .members-grid {

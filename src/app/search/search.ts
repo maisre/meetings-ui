@@ -17,9 +17,16 @@ export class Search implements OnInit {
   public prayers: Array<{ date: Date; prayer: String }> = [];
   public allMembers: Array<{ id: String; name: String }> = [];
   public filteredMembers: Array<{ id: String; name: String }> = [];
+  public activeMembers: Array<{
+    id: String;
+    name: String;
+    lastActivity: Date;
+    activityType: string;
+  }> = [];
   public searchDate: Date = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
   public selectedDateRange: string = '1year';
   public selectedFilterType: string = 'both';
+  public isParticipatedSectionCollapsed: boolean = false;
 
   ngOnInit() {
     this.getInfo();
@@ -69,6 +76,10 @@ export class Search implements OnInit {
     console.log('Filter type changed to:', this.selectedFilterType);
   }
 
+  public toggleParticipatedSection() {
+    this.isParticipatedSectionCollapsed = !this.isParticipatedSectionCollapsed;
+  }
+
   public filterMembersAfterSearchDate() {
     // Find all speakers and prayers that happened after searchDate
     const speakersAfterDate = this.speakers.filter(
@@ -80,6 +91,74 @@ export class Search implements OnInit {
 
     console.log('Speakers after date:', speakersAfterDate.length);
     console.log('Prayers after date:', prayersAfterDate.length);
+
+    // Build active members list with their last activity based on selected filter type
+    this.activeMembers = [];
+    const memberActivityMap = new Map<string, { lastActivity: Date; activityType: string }>();
+
+    // Process activities based on selected filter type
+    switch (this.selectedFilterType) {
+      case 'speakers':
+        // Only process speakers
+        speakersAfterDate.forEach((speaker) => {
+          const memberId = String(speaker.speaker);
+          const activityDate = new Date(speaker.date);
+          const existing = memberActivityMap.get(memberId);
+
+          if (!existing || activityDate > existing.lastActivity) {
+            memberActivityMap.set(memberId, { lastActivity: activityDate, activityType: 'Spoke' });
+          }
+        });
+        break;
+      case 'prayers':
+        // Only process prayers
+        prayersAfterDate.forEach((prayer) => {
+          const memberId = String(prayer.prayer);
+          const activityDate = new Date(prayer.date);
+          const existing = memberActivityMap.get(memberId);
+
+          if (!existing || activityDate > existing.lastActivity) {
+            memberActivityMap.set(memberId, { lastActivity: activityDate, activityType: 'Prayed' });
+          }
+        });
+        break;
+      case 'both':
+      default:
+        // Process both speakers and prayers
+        speakersAfterDate.forEach((speaker) => {
+          const memberId = String(speaker.speaker);
+          const activityDate = new Date(speaker.date);
+          const existing = memberActivityMap.get(memberId);
+
+          if (!existing || activityDate > existing.lastActivity) {
+            memberActivityMap.set(memberId, { lastActivity: activityDate, activityType: 'Spoke' });
+          }
+        });
+
+        prayersAfterDate.forEach((prayer) => {
+          const memberId = String(prayer.prayer);
+          const activityDate = new Date(prayer.date);
+          const existing = memberActivityMap.get(memberId);
+
+          if (!existing || activityDate > existing.lastActivity) {
+            memberActivityMap.set(memberId, { lastActivity: activityDate, activityType: 'Prayed' });
+          }
+        });
+        break;
+    }
+
+    // Convert to active members array with member names
+    this.activeMembers = Array.from(memberActivityMap.entries())
+      .map(([memberId, activity]) => {
+        const member = this.allMembers.find((m) => String(m.id) === memberId);
+        return {
+          id: memberId,
+          name: member ? member.name : memberId,
+          lastActivity: activity.lastActivity,
+          activityType: activity.activityType,
+        };
+      })
+      .sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime());
 
     let activeMemberNames = new Set<string>();
 

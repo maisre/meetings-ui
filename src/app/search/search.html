@@ -18,6 +18,50 @@
   </div>
 </div>
 
+<div class="active-members-display" *ngIf="activeMembers.length > 0">
+  <div class="section-header" (click)="toggleParticipatedSection()">
+    <h3>Members Who Have Participated ({{ activeMembers.length }})</h3>
+    <span class="collapse-icon" [class.collapsed]="isParticipatedSectionCollapsed">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <polyline points="6,9 12,15 18,9"></polyline>
+      </svg>
+    </span>
+  </div>
+
+  <div class="section-content" [class.collapsed]="isParticipatedSectionCollapsed">
+    <p class="search-info">
+      <ng-container [ngSwitch]="selectedFilterType">
+        <span *ngSwitchCase="'speakers'"
+          >Members who have spoken since {{ searchDate | date : 'MMM d, y' }}</span
+        >
+        <span *ngSwitchCase="'prayers'"
+          >Members who have prayed since {{ searchDate | date : 'MMM d, y' }}</span
+        >
+        <span *ngSwitchDefault
+          >Members who have spoken or prayed since {{ searchDate | date : 'MMM d, y' }}</span
+        >
+      </ng-container>
+    </p>
+
+    <div class="active-members-grid">
+      <div class="active-member-card" *ngFor="let member of activeMembers">
+        <div class="member-name">{{ member.name }}</div>
+        <div class="member-activity">
+          <span class="activity-type">{{ member.activityType }}</span>
+          <span class="activity-date">{{ member.lastActivity | date : 'MMM d, y' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="members-display">
   <h3>Available Members ({{ filteredMembers.length }})</h3>
   <p class="search-info">
