@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from './../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class AuthService {
   private readonly TOKEN_KEY = 'auth_token';
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
@@ -25,22 +27,21 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  login(): void {
+  login(username: string, password: string): void {
     this.http
       .post<{ access_token: string }>(`${environment.apiUrl}/auth/login`, {
-        username: 'john',
-        password: 'changeme',
+        username: username,
+        password: password,
       })
       .subscribe((res) => {
         console.log(res);
         this.setToken(res.access_token);
+        this.router.navigate(['/home']);
       });
   }
 
   logout(): void {
-    this.http.post(`${environment.apiUrl}/auth/logout`, {}).subscribe((res) => {
-      console.log(res);
-    });
+    this.removeToken();
   }
 
   test(): void {

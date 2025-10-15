@@ -18,7 +18,7 @@
 
   <div class="members-grid" *ngIf="!loading && !error">
     <ch-member-card
-      *ngFor="let member of members"
+      *ngFor="let member of sortedMembers"
       [member]="member"
       (statusChanged)="onStatusChanged($event)"
       (memberRemoved)="onMemberRemoved($event)"

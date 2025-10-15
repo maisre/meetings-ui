@@ -18,7 +18,7 @@ export class MemberCard {
 
   toggleStatus() {
     const newStatus = !this.member.isActive;
-    this.memberService.updateMemberStatus(this.member.id, newStatus).subscribe({
+    this.memberService.updateMemberStatus(this.member._id, newStatus).subscribe({
       next: (updatedMember) => {
         this.member = updatedMember;
         this.statusChanged.emit({ id: this.member.id, active: newStatus });
@@ -34,8 +34,8 @@ export class MemberCard {
       this.showConfirmation = true;
       return;
     }
-
-    this.memberService.deleteMember(this.member.id).subscribe({
+    console.log(this.member);
+    this.memberService.deleteMember(this.member._id).subscribe({
       next: () => {
         this.memberRemoved.emit(this.member.id);
       },

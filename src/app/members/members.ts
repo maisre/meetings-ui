@@ -16,6 +16,15 @@ export class Members implements OnInit {
   loading = true;
   error: string | null = null;
 
+  get sortedMembers(): Member[] {
+    return [...this.members].sort((a, b) => {
+      // Active members first (true comes before false)
+      if (a.isActive && !b.isActive) return -1;
+      if (!a.isActive && b.isActive) return 1;
+      return 0;
+    });
+  }
+
   ngOnInit() {
     this.loadMembers();
   }
@@ -46,7 +55,6 @@ export class Members implements OnInit {
   }
 
   onMemberRemoved(memberId: string) {
-    // Remove the member from the local array
     this.members = this.members.filter((member) => member.id !== memberId);
   }
 

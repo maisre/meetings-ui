@@ -1,1 +1,17 @@
-<router-outlet />
+<nav class="navbar">
+  <div class="nav-brand">
+    <a routerLink="/home" class="nav-brand-link">
+      <h1>{{ title() }}</h1>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a routerLink="/search" routerLinkActive="active" class="nav-link">Search</a>
+    <a routerLink="/members" routerLinkActive="active" class="nav-link">Members</a>
+    <a routerLink="/meetings" routerLinkActive="active" class="nav-link">Meetings</a>
+    <a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a>
+  </div>
+</nav>
+
+<main class="main-content">
+  <router-outlet />
+</main>

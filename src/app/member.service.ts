@@ -4,6 +4,7 @@ import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 
 export interface Member {
+  _id: string;
   id: string;
   name: string;
   isActive: boolean;
@@ -20,7 +21,7 @@ export class MemberService {
   }
 
   public updateMemberStatus(id: string, active: boolean): Observable<Member> {
-    return this.http.patch<Member>(`${environment.apiUrl}/members/${id}`, { active });
+    return this.http.put<Member>(`${environment.apiUrl}/members/${id}`, { isActive: active });
   }
 
   public deleteMember(id: string): Observable<void> {
