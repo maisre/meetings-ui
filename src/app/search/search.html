@@ -1,3 +1,51 @@
+<div class="name-search-section">
+  <div class="form-group">
+    <label for="memberSearch">Search Member:</label>
+    <div class="autocomplete-container">
+      <input
+        type="text"
+        id="memberSearch"
+        class="form-control autocomplete-input"
+        [value]="nameSearchQuery"
+        (input)="onNameInput($event)"
+        (focus)="showNameDropdown = nameSearchQuery.length > 0"
+        (blur)="onNameBlur()"
+        placeholder="Type to search members..."
+      />
+      <div class="autocomplete-dropdown" *ngIf="showNameDropdown && autocompleteMembers.length > 0">
+        <div
+          *ngFor="let member of autocompleteMembers"
+          class="autocomplete-option"
+          (click)="selectMember(member)"
+        >
+          {{ member.name }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="member-activities-display" *ngIf="selectedMember && memberActivities.length > 0">
+    <h3>{{ selectedMember.name }} - Activity History</h3>
+    <div class="activities-list">
+      <div class="activity-item" *ngFor="let activity of memberActivities">
+        <span
+          class="activity-type-badge"
+          [class.spoke]="activity.type === 'Spoke'"
+          [class.prayed]="activity.type === 'Prayed'"
+        >
+          {{ activity.type }}
+        </span>
+        <span class="activity-date">{{ activity.date | date : 'MMM d, y' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="member-activities-display" *ngIf="selectedMember && memberActivities.length === 0">
+    <h3>{{ selectedMember.name }} - Activity History</h3>
+    <p class="no-activities">No speaking or prayer activities found for this member.</p>
+  </div>
+</div>
+
 <div class="search-controls">
   <div class="control-group">
     <label for="dateRange">Date Range:</label>

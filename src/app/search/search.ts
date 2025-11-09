@@ -28,6 +28,16 @@ export class Search implements OnInit {
   public selectedFilterType: string = 'both';
   public isParticipatedSectionCollapsed: boolean = false;
 
+  // Name search properties
+  public autocompleteMembers: Array<{ id: String; name: String }> = [];
+  public showNameDropdown: boolean = false;
+  public selectedMember: { id: String; name: String } | null = null;
+  public memberActivities: Array<{
+    date: Date;
+    type: 'Spoke' | 'Prayed';
+  }> = [];
+  public nameSearchQuery: string = '';
+
   ngOnInit() {
     this.getInfo();
   }
@@ -44,6 +54,7 @@ export class Search implements OnInit {
     });
     this.memberService.getMembers().subscribe((res) => {
       this.allMembers = res;
+      this.autocompleteMembers = [...this.allMembers];
       this.filterMembersAfterSearchDate();
     });
   }
@@ -191,5 +202,73 @@ export class Search implements OnInit {
     console.log('Filter type:', this.selectedFilterType);
     console.log('Active members:', Array.from(activeMemberNames));
     console.log('Remaining members:', this.filteredMembers);
+  }
+
+  // Name search methods
+  public filterMembers(query: string): Array<{ id: String; name: String }> {
+    if (!query) return this.allMembers;
+    return this.allMembers.filter((member) =>
+      member.name.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  public onNameInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const query = target.value;
+    this.nameSearchQuery = query;
+    this.autocompleteMembers = this.filterMembers(query);
+    this.showNameDropdown = query.length > 0;
+    if (query.length === 0) {
+      this.selectedMember = null;
+      this.memberActivities = [];
+    }
+  }
+
+  public onNameBlur() {
+    // Delay hiding dropdown to allow click events to fire
+    setTimeout(() => {
+      this.showNameDropdown = false;
+    }, 200);
+  }
+
+  public selectMember(member: { id: String; name: String }) {
+    this.selectedMember = member;
+    this.nameSearchQuery = member.name as string;
+    this.showNameDropdown = false;
+    this.findMemberActivities(member.id);
+  }
+
+  public findMemberActivities(memberId: String) {
+    const activities: Array<{ date: Date; type: 'Spoke' | 'Prayed' }> = [];
+
+    // Find all speaking activities
+    this.speakers.forEach((speaker) => {
+      if (String(speaker.speaker) === String(memberId)) {
+        activities.push({
+          date: new Date(speaker.date),
+          type: 'Spoke',
+        });
+      }
+    });
+
+    // Find all prayer activities
+    this.prayers.forEach((prayer) => {
+      if (String(prayer.prayer) === String(memberId)) {
+        activities.push({
+          date: new Date(prayer.date),
+          type: 'Prayed',
+        });
+      }
+    });
+
+    // Sort by date, newest first
+    this.memberActivities = activities.sort(
+      (a, b) => b.date.getTime() - a.date.getTime()
+    );
+  }
+
+  public getMemberName(memberId: String): string {
+    const member = this.allMembers.find((m) => String(m.id) === String(memberId));
+    return member ? (member.name as string) : '';
   }
 }
