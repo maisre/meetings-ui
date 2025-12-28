@@ -22,6 +22,9 @@ export class Meetings implements OnInit {
   meetingForm!: FormGroup;
   wardBusinessTypes = Object.values(WardBusinessType);
   showCreateForm = false;
+  showEditModal = false;
+  editingMeeting: Meeting | null = null;
+  editingMeetingId: string | null = null;
 
   // Autocomplete properties
   filteredMembers: { id: string; name: string }[] = [];
@@ -113,10 +116,71 @@ export class Meetings implements OnInit {
   toggleCreateForm() {
     this.showCreateForm = !this.showCreateForm;
     if (!this.showCreateForm) {
-      this.meetingForm.reset();
-      this.initializeForm();
-      this.speakerDropdowns = [];
+      this.resetForm();
     }
+  }
+
+  openEditModal(meeting: Meeting) {
+    console.log('opening', meeting);
+    this.editingMeeting = meeting;
+    this.editingMeetingId = meeting._id || null;
+    this.showEditModal = true;
+    this.populateFormForEdit(meeting);
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+    this.editingMeeting = null;
+    this.editingMeetingId = null;
+    this.resetForm();
+  }
+
+  private resetForm() {
+    this.meetingForm.reset();
+    this.initializeForm();
+    this.speakerDropdowns = [];
+  }
+
+  private populateFormForEdit(meeting: Meeting) {
+    this.initializeForm();
+
+    // Format date for input
+    const meetingDate = new Date(meeting.date);
+    const dateStr = meetingDate.toISOString().split('T')[0];
+
+    // Find member IDs from names (since they're stored as names in the display)
+    const invocationId =
+      this.members.find((m) => m.name === meeting.invocation)?.id || meeting.invocation;
+    const benedictionId =
+      this.members.find((m) => m.name === meeting.benediction)?.id || meeting.benediction;
+
+    this.meetingForm.patchValue({
+      date: dateStr,
+      invocation: invocationId,
+      benediction: benedictionId,
+    });
+
+    // Add speakers
+    meeting.speakers.forEach((speaker) => {
+      const speakerId = this.members.find((m) => m.name === speaker)?.id || speaker;
+      this.speakers.push(this.fb.control(speakerId, Validators.required));
+      this.speakerDropdowns.push(false);
+    });
+
+    // Add ward business
+    meeting.wardBusiness?.forEach((business) => {
+      this.wardBusiness.push(
+        this.fb.group({
+          type: [business.type, Validators.required],
+          text: [business.text, Validators.required],
+        })
+      );
+    });
+
+    // Add stake business
+    meeting.stakeBusiness?.forEach((business) => {
+      this.stakeBusiness.push(this.fb.control(business, Validators.required));
+    });
   }
 
   // Member filtering methods
@@ -184,11 +248,18 @@ export class Meetings implements OnInit {
         stakeBusiness: formValue.stakeBusiness,
       };
 
-      this.meetingService.createMeeting(meeting).subscribe(() => {
-        this.toggleCreateForm();
-        // Refresh meetings list
-        this.ngOnInit();
-      });
+      if (this.editingMeeting && this.editingMeetingId) {
+        console.log(this.editingMeetingId);
+        this.meetingService.updateMeeting(this.editingMeetingId, meeting).subscribe(() => {
+          this.closeEditModal();
+          this.ngOnInit();
+        });
+      } else {
+        this.meetingService.createMeeting(meeting).subscribe(() => {
+          this.toggleCreateForm();
+          this.ngOnInit();
+        });
+      }
     }
   }
 }

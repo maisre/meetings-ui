@@ -27,4 +27,8 @@ export class MeetingService {
   public createMeeting(meeting: Meeting): Observable<Meeting> {
     return this.http.post<Meeting>(`${environment.apiUrl}/meetings`, meeting);
   }
+
+  public updateMeeting(id: string, meeting: Meeting): Observable<Meeting> {
+    return this.http.post<Meeting>(`${environment.apiUrl}/meetings/${id}`, meeting);
+  }
 }

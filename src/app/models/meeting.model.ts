@@ -1,6 +1,7 @@
 import { WardBusinessItem } from './wardbusiness';
 
 export interface Meeting {
+  _id?: string;
   date: Date;
   invocation: string;
   speakers: string[];
