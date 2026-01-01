@@ -1,0 +1,102 @@
+<div class="conduct-container" *ngIf="!loading && meeting">
+  <header class="meeting-header">
+    <h1>{{ meeting.date | date : 'EEEE, MMMM d, y' }}</h1>
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progress"></div>
+    </div>
+    <span class="progress-text">{{ currentIndex + 1 }} of {{ agendaItems.length }}</span>
+  </header>
+
+  <main class="agenda-stage" *ngIf="!isComplete">
+    <!-- Previous Item -->
+    <div
+      *ngIf="previousItem"
+      class="agenda-card card-previous"
+      [class.type-welcome]="previousItem.type === 'welcome'"
+      [class.type-invocation]="previousItem.type === 'invocation'"
+      [class.type-stake]="previousItem.type === 'stake'"
+      [class.type-ward]="previousItem.type === 'ward'"
+      [class.type-speaker]="previousItem.type === 'speaker'"
+      [class.type-benediction]="previousItem.type === 'benediction'"
+      (click)="goBack()"
+    >
+      <div class="card-badge">{{ previousItem.type | titlecase }}</div>
+      <h2 class="card-title">{{ previousItem.title }}</h2>
+      <p class="card-subtitle" *ngIf="previousItem.subtitle">{{ previousItem.subtitle }}</p>
+    </div>
+
+    <!-- Current Item -->
+    <div
+      *ngIf="currentItem"
+      class="agenda-card card-current"
+      [class.type-welcome]="currentItem.type === 'welcome'"
+      [class.type-invocation]="currentItem.type === 'invocation'"
+      [class.type-stake]="currentItem.type === 'stake'"
+      [class.type-ward]="currentItem.type === 'ward'"
+      [class.type-speaker]="currentItem.type === 'speaker'"
+      [class.type-benediction]="currentItem.type === 'benediction'"
+      (click)="goForward()"
+      (keydown.enter)="goForward()"
+      (keydown.space)="goForward()"
+      tabindex="0"
+      role="button"
+      aria-label="Proceed to next item"
+    >
+      <div class="card-badge">{{ currentItem.type | titlecase }}</div>
+      <h2 class="card-title">{{ currentItem.title }}</h2>
+      <p class="card-subtitle" *ngIf="currentItem.subtitle">{{ currentItem.subtitle }}</p>
+    </div>
+
+    <!-- Next Items (up to 2) -->
+    <div class="upcoming-stack">
+      <div
+        *ngFor="let item of nextItems; let i = index"
+        class="agenda-card card-upcoming"
+        [class.card-upcoming-1]="i === 0"
+        [class.card-upcoming-2]="i === 1"
+        [class.type-welcome]="item.type === 'welcome'"
+        [class.type-invocation]="item.type === 'invocation'"
+        [class.type-stake]="item.type === 'stake'"
+        [class.type-ward]="item.type === 'ward'"
+        [class.type-speaker]="item.type === 'speaker'"
+        [class.type-benediction]="item.type === 'benediction'"
+      >
+        <div class="card-badge">{{ item.type | titlecase }}</div>
+        <h2 class="card-title">{{ item.title }}</h2>
+      </div>
+    </div>
+  </main>
+
+  <!-- Navigation Controls -->
+  <nav class="nav-controls" *ngIf="!isComplete">
+    <button
+      class="nav-btn nav-prev"
+      (click)="goBack()"
+      [disabled]="currentIndex === 0"
+      aria-label="Go back"
+    >
+      <span class="nav-arrow">←</span>
+      <span class="nav-label">Back</span>
+    </button>
+    <div class="nav-hint">Tap card to advance</div>
+    <button class="nav-btn nav-next" (click)="goForward()" aria-label="Go forward">
+      <span class="nav-label">Next</span>
+      <span class="nav-arrow">→</span>
+    </button>
+  </nav>
+
+  <!-- Completion Screen -->
+  <main class="agenda-stage" *ngIf="isComplete">
+    <div class="completion-card">
+      <div class="completion-icon">✓</div>
+      <h2>Meeting Complete</h2>
+      <p>All agenda items have been covered.</p>
+      <button class="reset-btn" (click)="reset()">Start Over</button>
+    </div>
+  </main>
+</div>
+
+<div class="loading" *ngIf="loading">
+  <div class="loading-spinner"></div>
+  <p>Loading meeting...</p>
+</div>

@@ -1,0 +1,397 @@
+.conduct-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  font-family: 'Crimson Pro', Georgia, serif;
+}
+
+/* Header */
+.meeting-header {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.meeting-header h1 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.05em;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+  max-width: 300px;
+  margin: 0 auto 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #e6b980, #eacda3);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Main Stage */
+.agenda-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 2rem;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Agenda Cards Base */
+.agenda-card {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-badge {
+  display: inline-block;
+  padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  color: #1a1a2e;
+}
+
+.card-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.card-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+}
+
+/* Previous Card */
+.card-previous {
+  opacity: 0.4;
+  transform: scale(0.85);
+  cursor: pointer;
+  padding: 1rem 1.5rem;
+}
+
+.card-previous:hover {
+  opacity: 0.6;
+  transform: scale(0.87);
+}
+
+.card-previous .card-title {
+  font-size: 1rem;
+}
+
+.card-previous .card-subtitle {
+  font-size: 0.875rem;
+}
+
+.card-previous .card-badge {
+  font-size: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Current Card */
+.card-current {
+  padding: 2.5rem 2rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: cardPulse 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-current:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-current:active {
+  transform: scale(0.98);
+}
+
+.card-current .card-title {
+  font-size: 1.75rem;
+}
+
+.card-current .card-subtitle {
+  font-size: 1.35rem;
+}
+
+.card-current .card-badge {
+  font-size: 0.75rem;
+  padding: 0.35rem 1rem;
+  margin-bottom: 1rem;
+}
+
+@keyframes cardPulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Upcoming Stack */
+.upcoming-stack {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-upcoming {
+  opacity: 0.25;
+  transform: scale(0.8);
+  padding: 0.75rem 1.25rem;
+}
+
+.card-upcoming .card-title {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.card-upcoming .card-badge {
+  font-size: 0.55rem;
+  padding: 0.15rem 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.card-upcoming-1 {
+  opacity: 0.3;
+  transform: scale(0.82);
+}
+
+.card-upcoming-2 {
+  opacity: 0.15;
+  transform: scale(0.78);
+}
+
+/* Type-specific colors */
+.type-welcome .card-badge {
+  background: linear-gradient(135deg, #e6b980, #eacda3);
+}
+
+.type-invocation .card-badge {
+  background: linear-gradient(135deg, #a8e6cf, #88d8b0);
+}
+
+.type-stake .card-badge {
+  background: linear-gradient(135deg, #b8c6db, #f5f7fa);
+}
+
+.type-ward .card-badge {
+  background: linear-gradient(135deg, #89c4f4, #59abe3);
+}
+
+.type-speaker .card-badge {
+  background: linear-gradient(135deg, #f7dc6f, #f5b041);
+}
+
+.type-benediction .card-badge {
+  background: linear-gradient(135deg, #d7bde2, #bb8fce);
+}
+
+/* Navigation Controls */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem 2rem;
+  gap: 1rem;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.nav-arrow {
+  font-size: 1.1rem;
+}
+
+.nav-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+}
+
+/* Completion Card */
+.completion-card {
+  width: 100%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  animation: cardPulse 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.completion-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #a8e6cf, #88d8b0);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: #1a1a2e;
+}
+
+.completion-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.completion-card p {
+  margin: 0 0 2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.reset-btn {
+  padding: 0.75rem 2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 100px;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #e6b980;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading p {
+  margin: 0;
+  font-family: 'Crimson Pro', Georgia, serif;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .meeting-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .meeting-header h1 {
+    font-size: 1.2rem;
+  }
+
+  .agenda-stage {
+    padding: 1rem 1.25rem;
+  }
+
+  .card-current {
+    padding: 2rem 1.5rem;
+  }
+
+  .card-current .card-title {
+    font-size: 1.4rem;
+  }
+
+  .card-current .card-subtitle {
+    font-size: 1.15rem;
+  }
+
+  .nav-controls {
+    padding: 0.75rem 1.25rem 1.5rem;
+  }
+
+  .nav-label {
+    display: none;
+  }
+
+  .nav-btn {
+    padding: 0.75rem 1rem;
+  }
+}

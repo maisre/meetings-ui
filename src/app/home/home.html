@@ -1,4 +1,78 @@
-<div class="construction-notice">
+<!-- Authenticated: Show upcoming meetings -->
+<div class="home-container" *ngIf="isAuthenticated">
+  <header class="home-header">
+    <h1>Upcoming Meetings</h1>
+  </header>
+
+  <!-- Loading state -->
+  <div class="loading-container" *ngIf="loading">
+    <div class="loading-spinner"></div>
+    <p>Loading meetings...</p>
+  </div>
+
+  <!-- No meetings -->
+  <div class="empty-state" *ngIf="!loading && upcomingMeetings.length === 0">
+    <div class="empty-icon">📅</div>
+    <h2>No Upcoming Meetings</h2>
+    <p>There are no scheduled meetings at this time.</p>
+  </div>
+
+  <!-- Meetings list -->
+  <div class="meetings-grid" *ngIf="!loading && upcomingMeetings.length > 0">
+    <article class="meeting-card" *ngFor="let meeting of upcomingMeetings">
+      <div class="meeting-date-badge">
+        <span class="month">{{ meeting.date | date : 'MMM' }}</span>
+        <span class="day">{{ meeting.date | date : 'd' }}</span>
+        <span class="weekday">{{ meeting.date | date : 'EEEE' }}</span>
+      </div>
+
+      <div class="meeting-details">
+        <div class="meeting-actions">
+          <button class="conduct-btn" (click)="conductMeeting(meeting._id!)">Conduct</button>
+        </div>
+
+        <section class="detail-section" *ngIf="meeting.speakers?.length">
+          <h3>Speakers</h3>
+          <ul class="speaker-list">
+            <li *ngFor="let speaker of meeting.speakers">{{ speaker }}</li>
+          </ul>
+        </section>
+
+        <section class="detail-section prayers">
+          <h3>Prayers</h3>
+          <div class="prayer-row">
+            <span class="label">Invocation</span>
+            <span class="name">{{ meeting.invocation }}</span>
+          </div>
+          <div class="prayer-row">
+            <span class="label">Benediction</span>
+            <span class="name">{{ meeting.benediction }}</span>
+          </div>
+        </section>
+
+        <section class="detail-section" *ngIf="meeting.wardBusiness?.length">
+          <h3>Ward Business</h3>
+          <ul class="business-list">
+            <li *ngFor="let item of meeting.wardBusiness">
+              <span class="business-type">{{ item.type | titlecase }}</span>
+              {{ item.text }}
+            </li>
+          </ul>
+        </section>
+
+        <section class="detail-section" *ngIf="meeting.stakeBusiness?.length">
+          <h3>Stake Business</h3>
+          <ul class="business-list">
+            <li *ngFor="let item of meeting.stakeBusiness">{{ item }}</li>
+          </ul>
+        </section>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- Not authenticated: Show construction notice -->
+<div class="construction-notice" *ngIf="!isAuthenticated">
   <div class="notice-content">
     <h2>🚧 Site Under Construction</h2>
     <p>

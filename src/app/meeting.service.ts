@@ -31,4 +31,12 @@ export class MeetingService {
   public updateMeeting(id: string, meeting: Meeting): Observable<Meeting> {
     return this.http.post<Meeting>(`${environment.apiUrl}/meetings/${id}`, meeting);
   }
+
+  public getUpcomingMeetings(): Observable<Meeting[]> {
+    return this.http.get<Meeting[]>(`${environment.apiUrl}/meetings/upcoming`);
+  }
+
+  public getMeeting(id: string): Observable<Meeting> {
+    return this.http.get<Meeting>(`${environment.apiUrl}/meetings/${id}`);
+  }
 }

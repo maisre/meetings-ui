@@ -1,3 +1,215 @@
+/* Home Container */
+.home-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.home-header {
+  margin-bottom: 2rem;
+}
+
+.home-header h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  color: #666;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e0e0e0;
+  border-top-color: #4a69bd;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h2 {
+  color: #1a1a2e;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.empty-state p {
+  color: #666;
+  margin: 0;
+}
+
+/* Meetings Grid */
+.meetings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Meeting Card */
+.meeting-card {
+  display: flex;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+}
+
+.meeting-date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1.25rem;
+  background: linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%);
+  color: #fff;
+  min-width: 100px;
+}
+
+.meeting-date-badge .month {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.meeting-date-badge .day {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.meeting-date-badge .weekday {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  opacity: 0.85;
+  margin-top: 0.25rem;
+}
+
+.meeting-details {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Meeting Actions */
+.meeting-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.conduct-btn {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.conduct-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 105, 189, 0.35);
+}
+
+.conduct-btn:active {
+  transform: translateY(0);
+}
+
+/* Detail Sections */
+.detail-section h3 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888;
+  margin: 0 0 0.5rem;
+}
+
+.speaker-list,
+.business-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.speaker-list li {
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  padding: 0.2rem 0;
+}
+
+.business-list li {
+  font-size: 0.9rem;
+  color: #444;
+  padding: 0.2rem 0;
+}
+
+.business-type {
+  font-weight: 500;
+  color: #4a69bd;
+  margin-right: 0.25rem;
+}
+
+.business-type::after {
+  content: ':';
+}
+
+/* Prayers Section */
+.prayers .prayer-row {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+.prayers .label {
+  color: #888;
+  min-width: 80px;
+}
+
+.prayers .name {
+  color: #1a1a2e;
+  font-weight: 500;
+}
+
+/* Construction Notice (unchanged) */
 .construction-notice {
   display: flex;
   justify-content: center;
@@ -35,4 +247,31 @@
   margin-bottom: 0;
   font-weight: 500;
   color: #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .meeting-card {
+    flex-direction: column;
+  }
+
+  .meeting-date-badge {
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 1rem;
+    min-width: auto;
+  }
+
+  .meeting-date-badge .day {
+    font-size: 1.5rem;
+  }
+
+  .meeting-date-badge .month,
+  .meeting-date-badge .weekday {
+    font-size: 0.8rem;
+  }
 }
