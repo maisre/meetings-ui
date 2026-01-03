@@ -10,24 +10,10 @@ import { Member, MemberService } from '../member.service';
 })
 export class MemberCard {
   @Input() member!: Member;
-  @Output() statusChanged = new EventEmitter<{ id: string; active: boolean }>();
   @Output() memberRemoved = new EventEmitter<string>();
 
   private memberService = inject(MemberService);
   showConfirmation = false;
-
-  toggleStatus() {
-    const newStatus = !this.member.isActive;
-    this.memberService.updateMemberStatus(this.member._id, newStatus).subscribe({
-      next: (updatedMember) => {
-        this.member = updatedMember;
-        this.statusChanged.emit({ id: this.member.id, active: newStatus });
-      },
-      error: (error) => {
-        console.error('Failed to update member status:', error);
-      },
-    });
-  }
 
   removeMember() {
     if (!this.showConfirmation) {

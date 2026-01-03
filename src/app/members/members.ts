@@ -1,11 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MemberService, Member } from '../member.service';
 import { MemberCard } from '../member-card/member-card';
 
 @Component({
   selector: 'ch-members',
-  imports: [CommonModule, MemberCard],
+  imports: [CommonModule, FormsModule, MemberCard],
   templateUrl: './members.html',
   styleUrl: './members.css',
 })
@@ -15,14 +16,12 @@ export class Members implements OnInit {
   members: Member[] = [];
   loading = true;
   error: string | null = null;
+  searchTerm = '';
 
-  get sortedMembers(): Member[] {
-    return [...this.members].sort((a, b) => {
-      // Active members first (true comes before false)
-      if (a.isActive && !b.isActive) return -1;
-      if (!a.isActive && b.isActive) return 1;
-      return 0;
-    });
+  get filteredMembers(): Member[] {
+    if (!this.searchTerm.trim()) return this.members;
+    const term = this.searchTerm.toLowerCase();
+    return this.members.filter(m => m.name.toLowerCase().includes(term));
   }
 
   ngOnInit() {
@@ -44,14 +43,6 @@ export class Members implements OnInit {
         console.error('Error loading members:', error);
       },
     });
-  }
-
-  onStatusChanged(event: { id: string; active: boolean }) {
-    // Update the local member data
-    const member = this.members.find((m) => m.id === event.id);
-    if (member) {
-      member.isActive = event.active;
-    }
   }
 
   onMemberRemoved(memberId: string) {

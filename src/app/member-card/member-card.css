@@ -3,22 +3,12 @@
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid transparent;
+  border: 2px solid #e0e0e0;
   transition: all 0.3s ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 80px;
-}
-
-.member-card.active {
-  border-color: #4caf50;
-  background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
-}
-
-.member-card.inactive {
-  border-color: #f44336;
-  background: linear-gradient(135deg, #fff8f8 0%, #ffffff 100%);
 }
 
 .member-info {
@@ -32,60 +22,6 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #333;
-}
-
-.status-badge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  width: 70px;
-  text-align: center;
-}
-
-.status-badge.active {
-  background-color: #4caf50;
-  color: white;
-}
-
-.status-badge.inactive {
-  background-color: #f44336;
-  color: white;
-}
-
-.toggle-btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.toggle-btn.active {
-  background-color: #f44336;
-  color: white;
-}
-
-.toggle-btn.active:hover {
-  background-color: #d32f2f;
-}
-
-.toggle-btn.inactive {
-  background-color: #4caf50;
-  color: white;
-}
-
-.toggle-btn.inactive:hover {
-  background-color: #45a049;
-}
-
-.toggle-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .action-buttons {

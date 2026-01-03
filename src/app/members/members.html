@@ -6,6 +6,15 @@
     </button>
   </div>
 
+  <div class="search-container" *ngIf="!loading && !error">
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Search members..."
+      [(ngModel)]="searchTerm"
+    />
+  </div>
+
   <div class="loading" *ngIf="loading">
     <div class="spinner"></div>
     <p>Loading members...</p>
@@ -18,15 +27,14 @@
 
   <div class="members-grid" *ngIf="!loading && !error">
     <ch-member-card
-      *ngFor="let member of sortedMembers"
+      *ngFor="let member of filteredMembers"
       [member]="member"
-      (statusChanged)="onStatusChanged($event)"
       (memberRemoved)="onMemberRemoved($event)"
     >
     </ch-member-card>
   </div>
 
-  <div class="empty-state" *ngIf="!loading && !error && members.length === 0">
-    <p>No members found.</p>
+  <div class="empty-state" *ngIf="!loading && !error && filteredMembers.length === 0">
+    <p>{{ searchTerm ? 'No members match your search.' : 'No members found.' }}</p>
   </div>
 </div>
