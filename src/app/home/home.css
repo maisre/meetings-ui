@@ -128,19 +128,40 @@
 .meeting-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 0.5rem;
   margin-bottom: 0.25rem;
 }
 
+.edit-btn,
 .conduct-btn {
   padding: 0.5rem 1.25rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%);
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.edit-btn {
+  color: #4a69bd;
+  background: #f0f4ff;
+  border: 1px solid #d0daf5;
+}
+
+.edit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 105, 189, 0.2);
+  background: #e4ebff;
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+.conduct-btn {
+  color: #fff;
+  background: linear-gradient(135deg, #4a69bd 0%, #3c5aa6 100%);
 }
 
 .conduct-btn:hover {

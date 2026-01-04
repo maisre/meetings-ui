@@ -1,8 +1,30 @@
 <div class="members-container">
   <div class="header">
     <h1>Members</h1>
-    <button class="refresh-btn" (click)="refreshMembers()" [disabled]="loading">
-      {{ loading ? 'Loading...' : 'Refresh' }}
+    <div class="header-actions">
+      <button class="create-btn" (click)="toggleCreateForm()" [disabled]="loading">
+        {{ showCreateForm ? 'Cancel' : 'Create New' }}
+      </button>
+      <button class="refresh-btn" (click)="refreshMembers()" [disabled]="loading">
+        {{ loading ? 'Loading...' : 'Refresh' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="create-form" *ngIf="showCreateForm">
+    <input
+      type="text"
+      class="create-input"
+      placeholder="Enter member name..."
+      [(ngModel)]="newMemberName"
+      (keyup.enter)="createMember()"
+    />
+    <button
+      class="save-btn"
+      (click)="createMember()"
+      [disabled]="!newMemberName.trim() || creating"
+    >
+      {{ creating ? 'Saving...' : 'Save' }}
     </button>
   </div>
 

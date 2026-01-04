@@ -22,4 +22,8 @@ export class MemberService {
   public deleteMember(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/members/${id}`);
   }
+
+  public createMember(name: string): Observable<Member> {
+    return this.http.post<Member>(`${environment.apiUrl}/members`, { name });
+  }
 }

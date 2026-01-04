@@ -67,4 +67,8 @@ export class Home implements OnInit {
   conductMeeting(meetingId: string): void {
     this.router.navigate(['/conduct', meetingId]);
   }
+
+  editMeeting(meetingId: string): void {
+    this.router.navigate(['/meetings'], { queryParams: { edit: meetingId } });
+  }
 }

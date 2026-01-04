@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { DatePipe, CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MeetingService } from '../meeting.service';
 import { Meeting } from '../models/meeting.model';
 import { MemberService } from '../member.service';
@@ -16,6 +17,7 @@ export class Meetings implements OnInit {
   private meetingService = inject(MeetingService);
   private memberService = inject(MemberService);
   private fb = inject(FormBuilder);
+  private route = inject(ActivatedRoute);
 
   meetings: Meeting[] = [];
   members: { id: string; name: string }[] = [];
@@ -51,6 +53,15 @@ export class Meetings implements OnInit {
           );
         });
         this.meetings = res.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        // Check for edit query param and open modal if present
+        const editId = this.route.snapshot.queryParamMap.get('edit');
+        if (editId) {
+          const meetingToEdit = this.meetings.find((m) => m._id === editId);
+          if (meetingToEdit) {
+            this.openEditModal(meetingToEdit);
+          }
+        }
       });
     });
   }
@@ -58,8 +69,8 @@ export class Meetings implements OnInit {
   private initializeForm() {
     this.meetingForm = this.fb.group({
       date: ['', Validators.required],
-      invocation: ['', Validators.required],
-      benediction: ['', Validators.required],
+      invocation: [''],
+      benediction: [''],
       speakers: this.fb.array([]),
       wardBusiness: this.fb.array([]),
       stakeBusiness: this.fb.array([]),
@@ -83,7 +94,7 @@ export class Meetings implements OnInit {
   }
 
   addSpeaker() {
-    this.speakers.push(this.fb.control('', Validators.required));
+    this.speakers.push(this.fb.control(''));
     this.speakerDropdowns.push(false);
   }
 
@@ -95,8 +106,8 @@ export class Meetings implements OnInit {
   addWardBusiness() {
     this.wardBusiness.push(
       this.fb.group({
-        type: ['', Validators.required],
-        text: ['', Validators.required],
+        type: [''],
+        text: [''],
       })
     );
   }
@@ -106,7 +117,7 @@ export class Meetings implements OnInit {
   }
 
   addStakeBusiness() {
-    this.stakeBusiness.push(this.fb.control('', Validators.required));
+    this.stakeBusiness.push(this.fb.control(''));
   }
 
   removeStakeBusiness(index: number) {
@@ -163,7 +174,7 @@ export class Meetings implements OnInit {
     // Add speakers
     meeting.speakers.forEach((speaker) => {
       const speakerId = this.members.find((m) => m.name === speaker)?.id || speaker;
-      this.speakers.push(this.fb.control(speakerId, Validators.required));
+      this.speakers.push(this.fb.control(speakerId));
       this.speakerDropdowns.push(false);
     });
 
@@ -171,15 +182,15 @@ export class Meetings implements OnInit {
     meeting.wardBusiness?.forEach((business) => {
       this.wardBusiness.push(
         this.fb.group({
-          type: [business.type, Validators.required],
-          text: [business.text, Validators.required],
+          type: [business.type],
+          text: [business.text],
         })
       );
     });
 
     // Add stake business
     meeting.stakeBusiness?.forEach((business) => {
-      this.stakeBusiness.push(this.fb.control(business, Validators.required));
+      this.stakeBusiness.push(this.fb.control(business));
     });
   }
 

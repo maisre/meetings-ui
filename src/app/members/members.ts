@@ -17,6 +17,9 @@ export class Members implements OnInit {
   loading = true;
   error: string | null = null;
   searchTerm = '';
+  showCreateForm = false;
+  newMemberName = '';
+  creating = false;
 
   get filteredMembers(): Member[] {
     if (!this.searchTerm.trim()) return this.members;
@@ -51,5 +54,29 @@ export class Members implements OnInit {
 
   refreshMembers() {
     this.loadMembers();
+  }
+
+  toggleCreateForm() {
+    this.showCreateForm = !this.showCreateForm;
+    this.newMemberName = '';
+  }
+
+  createMember() {
+    const name = this.newMemberName.trim();
+    if (!name || this.creating) return;
+
+    this.creating = true;
+    this.memberService.createMember(name).subscribe({
+      next: (member) => {
+        this.members = [...this.members, member];
+        this.newMemberName = '';
+        this.showCreateForm = false;
+        this.creating = false;
+      },
+      error: (error) => {
+        console.error('Error creating member:', error);
+        this.creating = false;
+      },
+    });
   }
 }

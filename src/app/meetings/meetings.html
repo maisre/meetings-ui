@@ -35,7 +35,6 @@
             (input)="onInvocationInput($event)"
             (focus)="showInvocationDropdown = true"
             placeholder="Type to search members..."
-            required
           />
           <div
             class="autocomplete-dropdown"
@@ -49,12 +48,6 @@
               {{ member.name }}
             </div>
           </div>
-        </div>
-        <div
-          *ngIf="meetingForm.get('invocation')?.invalid && meetingForm.get('invocation')?.touched"
-          class="error-message"
-        >
-          Invocation is required
         </div>
       </div>
 
@@ -70,7 +63,6 @@
             (input)="onBenedictionInput($event)"
             (focus)="showBenedictionDropdown = true"
             placeholder="Type to search members..."
-            required
           />
           <div
             class="autocomplete-dropdown"
@@ -84,12 +76,6 @@
               {{ member.name }}
             </div>
           </div>
-        </div>
-        <div
-          *ngIf="meetingForm.get('benediction')?.invalid && meetingForm.get('benediction')?.touched"
-          class="error-message"
-        >
-          Benediction is required
         </div>
       </div>
 
@@ -106,7 +92,6 @@
                 (input)="onSpeakerInput($event, i)"
                 (focus)="speakerDropdowns[i] = true"
                 placeholder="Type to search members..."
-                required
               />
               <div
                 class="autocomplete-dropdown"
@@ -136,7 +121,7 @@
             class="ward-business-item"
           >
             <div class="ward-business-form" [formGroup]="getWardBusinessGroup(i)">
-              <select formControlName="type" class="form-control business-type-select" required>
+              <select formControlName="type" class="form-control business-type-select">
                 <option value="">Select type</option>
                 <option *ngFor="let type of wardBusinessTypes" [value]="type">
                   {{ type | titlecase }}
@@ -147,7 +132,6 @@
                 formControlName="text"
                 placeholder="Business description"
                 class="form-control business-text-input"
-                required
               />
               <button type="button" (click)="removeWardBusiness(i)" class="remove-btn">
                 Remove
@@ -171,7 +155,6 @@
               [formControlName]="i"
               placeholder="Stake business item"
               class="form-control stake-business-input"
-              required
             />
             <button type="button" (click)="removeStakeBusiness(i)" class="remove-btn">
               Remove
@@ -262,7 +245,6 @@
             (input)="onInvocationInput($event)"
             (focus)="showInvocationDropdown = true"
             placeholder="Type to search members..."
-            required
           />
           <div
             class="autocomplete-dropdown"
@@ -276,12 +258,6 @@
               {{ member.name }}
             </div>
           </div>
-        </div>
-        <div
-          *ngIf="meetingForm.get('invocation')?.invalid && meetingForm.get('invocation')?.touched"
-          class="error-message"
-        >
-          Invocation is required
         </div>
       </div>
 
@@ -297,7 +273,6 @@
             (input)="onBenedictionInput($event)"
             (focus)="showBenedictionDropdown = true"
             placeholder="Type to search members..."
-            required
           />
           <div
             class="autocomplete-dropdown"
@@ -311,12 +286,6 @@
               {{ member.name }}
             </div>
           </div>
-        </div>
-        <div
-          *ngIf="meetingForm.get('benediction')?.invalid && meetingForm.get('benediction')?.touched"
-          class="error-message"
-        >
-          Benediction is required
         </div>
       </div>
 
@@ -333,7 +302,6 @@
                 (input)="onSpeakerInput($event, i)"
                 (focus)="speakerDropdowns[i] = true"
                 placeholder="Type to search members..."
-                required
               />
               <div
                 class="autocomplete-dropdown"
@@ -363,7 +331,7 @@
             class="ward-business-item"
           >
             <div class="ward-business-form" [formGroup]="getWardBusinessGroup(i)">
-              <select formControlName="type" class="form-control business-type-select" required>
+              <select formControlName="type" class="form-control business-type-select">
                 <option value="">Select type</option>
                 <option *ngFor="let type of wardBusinessTypes" [value]="type">
                   {{ type | titlecase }}
@@ -374,7 +342,6 @@
                 formControlName="text"
                 placeholder="Business description"
                 class="form-control business-text-input"
-                required
               />
               <button type="button" (click)="removeWardBusiness(i)" class="remove-btn">
                 Remove
@@ -398,7 +365,6 @@
               [formControlName]="i"
               placeholder="Stake business item"
               class="form-control stake-business-input"
-              required
             />
             <button type="button" (click)="removeStakeBusiness(i)" class="remove-btn">
               Remove
